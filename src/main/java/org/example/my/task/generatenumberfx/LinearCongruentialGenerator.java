@@ -1,10 +1,9 @@
 package org.example.my.task.generatenumberfx;
 
-/**
- * Представляє генератор випадкових чисел за допомогою лінійного конгруентного методу.
- */
+import java.util.concurrent.atomic.AtomicLong;
+
 public class LinearCongruentialGenerator implements RandomNumberGenerator {
-    private long seed; // Початкове значення (насіння)
+    private AtomicLong seed; // Початкове значення (насіння)
     private final long a = 1664525; // Множник
     private final long c = 1013904223; // Приріст
     private final long m = (long) Math.pow(2, 32); // Модуль (2^32)
@@ -15,7 +14,7 @@ public class LinearCongruentialGenerator implements RandomNumberGenerator {
      * @param seed Початкове значення (насіння)
      */
     public LinearCongruentialGenerator(long seed) {
-        this.seed = seed;
+        this.seed = new AtomicLong(seed);
     }
 
     /**
@@ -25,7 +24,7 @@ public class LinearCongruentialGenerator implements RandomNumberGenerator {
      */
     @Override
     public float generate() {
-        seed = (a * seed + c) % m;
-        return Math.abs(seed - m / 2); // Повертає випадкове додатне число від 0 до m/2
+        long currentSeed = seed.getAndUpdate(prev -> (a * prev + c) % m);
+        return Math.abs(currentSeed - m / 2); // Повертає випадкове додатне число від 0 до m/2
     }
 }
