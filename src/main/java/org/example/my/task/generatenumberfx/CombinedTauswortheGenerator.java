@@ -21,15 +21,18 @@ public class CombinedTauswortheGenerator implements RandomNumberGenerator {
 
     // Метод для генерації випадкового числа
     @Override
-    public long generate() {
+    public float generate() {
         long result = 0;
         // Генерація числа шляхом здійснення операції XOR для кожного Tausworthe-генератора
         for (int i = 0; i < shifts.length; i++) {
             result ^= (state.get(i) << shifts[i]);
         }
         updateState(); // Оновлення стану
-        return result;
+
+        // Ігноруємо знаковий біт та встановлюємо його в 0 для забезпечення додатності числа
+        return result & Long.MAX_VALUE;
     }
+
 
     // Приватний метод для оновлення стану генератора
     private void updateState() {

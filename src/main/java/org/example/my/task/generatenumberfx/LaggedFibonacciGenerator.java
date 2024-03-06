@@ -34,16 +34,17 @@ public class LaggedFibonacciGenerator implements RandomNumberGenerator {
      * @return наступне випадкове число
      */
     @Override
-    public long generate() {
+    public float generate() {
         currentIndex++;
+        long next;
         if (currentIndex >= sequence.size()) {
-            long next = (sequence.get(currentIndex - lag1) - sequence.get(currentIndex - lag2)) % mod;
+            next = (sequence.get(currentIndex - lag1) - sequence.get(currentIndex - lag2)) % mod;
             sequence.add(next);
-            return next;
         } else {
-            long next = (sequence.get(currentIndex - lag1) - sequence.get(currentIndex - lag2)) % mod;
+            next = (sequence.get(currentIndex - lag1) - sequence.get(currentIndex - lag2)) % mod;
             sequence.set(currentIndex, next);
-            return next;
         }
+        // Забезпечуємо, щоб результат генерації завжди був додатнім
+        return Math.abs(next);
     }
 }

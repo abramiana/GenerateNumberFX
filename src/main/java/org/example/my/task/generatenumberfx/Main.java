@@ -97,32 +97,57 @@ public class Main extends Application {
         if (selectedRadioButton != null) {
             String generatorName = selectedRadioButton.getText();
             barChart.getData().clear(); // Очищення даних графіка
-            List<Long> sequence = generateData(generator, numOfNumbers);
+            List<Float> sequence = generateData(generator, numOfNumbers);
             StatisticalAnalysis(sequence);
             addDataToChart(sequence); // Додавання нових даних до графіка
         }
     }
 
-    private List<Long> generateData(RandomNumberGenerator generator, int numOfNumbers) {
-        List<Long> sequence = new ArrayList<>();
-        for (int i = 0; i < numOfNumbers; i++) { // Генерація заданої користувачем кількості чисел
-            long number = generator.generate();
+
+    private List<Float> generateData(RandomNumberGenerator generator, int numOfNumbers) {
+        List<Float> sequence = new ArrayList<>();
+        for (int i = 0; i < numOfNumbers; i++) {
+            float number = generator.generate();
             sequence.add(number);
         }
         return sequence;
     }
 
-    private void StatisticalAnalysis(List<Long> sequence) {
-        double mean = StatisticalAnalysis.calculateMean(sequence);
-        double stdDeviation = StatisticalAnalysis.calculateStandardDeviation(sequence);
-        double variance = StatisticalAnalysis.calculateVariance(sequence);
+
+
+    private void StatisticalAnalysis(List<Float> sequence) {
+        double mean = calculateMeanFloat(sequence);
+        double stdDeviation = calculateStandardDeviationFloat(sequence);
+        double variance = calculateVarianceFloat(sequence);
 
         meanLabel.setText("Середнє: " + mean);
         stdDeviationLabel.setText("Стандартне відхилення: " + stdDeviation);
         varianceLabel.setText("Дисперсія: " + variance);
     }
 
-    private void addDataToChart(List<Long> sequence) {
+    private double calculateMeanFloat(List<Float> sequence) {
+        double sum = 0;
+        for (float number : sequence) {
+            sum += number;
+        }
+        return sum / sequence.size();
+    }
+
+    private double calculateVarianceFloat(List<Float> sequence) {
+        double mean = calculateMeanFloat(sequence);
+        double temp = 0;
+        for (float number : sequence) {
+            temp += (number - mean) * (number - mean);
+        }
+        return temp / sequence.size();
+    }
+
+    private double calculateStandardDeviationFloat(List<Float> sequence) {
+        return Math.sqrt(calculateVarianceFloat(sequence));
+    }
+
+
+    private void addDataToChart(List<Float> sequence) {
         CategoryAxis xAxis = (CategoryAxis) barChart.getXAxis();
         NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
 
