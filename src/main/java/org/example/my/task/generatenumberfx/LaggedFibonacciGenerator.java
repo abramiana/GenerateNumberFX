@@ -2,16 +2,20 @@ package org.example.my.task.generatenumberfx;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Представляє генератор випадкових чисел за допомогою алгоритму Lagged Fibonacci.
  */
 public class LaggedFibonacciGenerator implements RandomNumberGenerator {
     private final List<Long> sequence;
-    private int currentIndex;
     private final int lag1 = 3; // Параметр відставання 1
     private final int lag2 = 2; // Параметр відставання 2
     private final int mod = 100; // Модуль
+    private final ExecutorService executorService; // Пул потоків для багатопоточної генерації
+    private int currentIndex;
 
     /**
      * Конструює генератор Lagged Fibonacci з використанням вказаного початкового значення.
@@ -26,6 +30,7 @@ public class LaggedFibonacciGenerator implements RandomNumberGenerator {
             sequence.add(next);
         }
         currentIndex = Math.max(lag1, lag2) - 1;
+        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     /**
