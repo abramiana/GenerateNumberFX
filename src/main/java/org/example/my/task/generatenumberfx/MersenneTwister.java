@@ -21,7 +21,7 @@ public class MersenneTwister implements RandomNumberGenerator {
     }
 
     @Override
-    public synchronized long generate() {
+    public synchronized float generate() {
         int y;
 
         // Перевірка, чи вийшов масив за межі та його оновлення, якщо потрібно
@@ -50,6 +50,6 @@ public class MersenneTwister implements RandomNumberGenerator {
         y ^= (y << 15) & 0xefc60000;
         y ^= (y >>> 18);
 
-        return y & 0xffffffffL; // Повернення 32-бітного значення
+        return y;
     }
 }

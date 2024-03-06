@@ -19,13 +19,13 @@ public class LinearCongruentialGenerator implements RandomNumberGenerator {
     }
 
     /**
-     * Генерує наступне випадкове число в послідовності.
+     * Генерує наступне випадкове додатне число в послідовності.
      *
-     * @return наступне випадкове число
+     * @return наступне випадкове додатне число
      */
     @Override
-    public long generate() {
+    public float generate() {
         seed = (a * seed + c) % m;
-        return seed - m / 2; // Повертає випадкове число від -m/2 до m/2
+        return Math.abs(seed - m / 2); // Повертає випадкове додатне число від 0 до m/2
     }
 }
